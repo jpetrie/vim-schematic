@@ -1,0 +1,121 @@
+*schematic.txt*  Minimalist project support.
+
+------------------------------------------------------------------------------
+INTRODUCTION                              *schematic*
+
+Schematic adds functionality for working with projects. A project is described
+by a JSON file containing information about configuration, targets and tasks
+relevant to the project. Schematic makes that metadata available to the editor
+and provides commands to interact with it, for example, by executing tasks via
+asynchronous jobs.
+
+Schematic projects consist of the following concepts:
+
+Configurations                           *schematic-configuration*
+A configuration is a container for project properties (see below for the full
+list. A project may have multiple configurations. For example, a project using
+CMake might define one configuration for each generated build directory. 
+
+If no configurations are defined by the project, Schematic will generate a
+default.
+
+Schematic allows selection of the active configuration via |:SConfig|.
+
+*schematic-targets*
+Targets represent outputs or outcomes of a project. For example, a project
+might have one target for a primary executable and another target for unit
+tests.
+
+Targets have associated clean, build and run scripts which can be executed
+asynchronously for the active target using |:SClean|, |:SBuild| and |:SRun|.
+
+Schematic allows selection of the active target via |:STarget|.
+
+------------------------------------------------------------------------------
+COMMANDS                                  *schematic-commands*
+
+*:SUpdate*  Locates the nearest project file and updates the project data for
+            the active tab page.
+
+*:SConfig*  Sets the current configuration for the active tab page.
+
+*:STarget*  Sets the current target for the active tab page.
+
+*:SClean*   Executes the clean action for the active target.
+
+*:SBuild*   Executes the build action for the active target.
+
+*:SRun*     Executes the run action for the active target.
+
+For all three task execution commands, the task script is run asynchronously
+via a job. If the script fails, the output is loaded into the quickfix window.
+
+------------------------------------------------------------------------------
+PROJECT DEFINITION                        *schematic-project*
+
+Schematic projects are simple JSON files.
+
+"targets"
+Defines a set of project targets. Keys in the dictionary are target names,
+values are dictionaries of target properties. >
+
+  "targets": {
+    "MyExecutable": { "build": "...", "run": "..." }
+  }
+<
+  "clean"
+  The script to execute when running |:SClean|.
+
+  "build"  
+  The script to execute when running |:SBuild|.
+
+  "run"
+  The script to execute when running |:SRun|.
+
+  Scripts can contain multiple lines seperated by `\n`. When invoking a
+  script, Schematic writes the entire script to a temporary file and executes
+  the file using the job API.
+
+"configurations"
+Defines a set of project configurations. Keys in the dictionary are
+configuration names, values are dictionaries of configuration properties: >
+
+  "configurations": {
+    "Debug": { "directory": "Build/Debug" }
+  }
+<
+  "directory"
+  The directory of the configuration. Relative paths are considered to be
+  relative to the directory containing the project definition file. When
+  executing a task (e.g., via |:SBuild|) Schematic sets the working directory
+  of the script to the directory of the current configuration.
+
+"default_clean"
+"default_build"
+"default_run"
+Defines default scripts for clean/build/run tasks, used if a target does not
+explicitly define its own script. In these scripts, the '@' character can be
+used as a placeholder for the target name.
+
+------------------------------------------------------------------------------
+OPTIONS                                   *schematic-options*
+
+*g:schematic_file_name*
+The name of Schematic project files. Defaults to "schematic.json" if not set
+by the user.
+
+*g:schematic_default_configuration_name*
+The name given to the configuration that Schematic generates if a project file
+doesn't explicitly define its own configurations. Defaults to "default" if not
+set by the user.
+
+------------------------------------------------------------------------------
+ABOUT                                     *schematic-about*
+
+Schematic is written and maintained by Josh Petrie. Grab the latest version,
+report a bug, or request a new feature via GitHub: >
+
+  https://github.com/jpetrie/vim-schematic
+<
+Schematic is distributed under the terms of the MIT license.
+
