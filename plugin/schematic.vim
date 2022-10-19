@@ -12,6 +12,10 @@ if !exists("g:schematic_file_name")
   let g:schematic_file_name = "schematic.json"
 endif
 
+if !exists("g:schematic_task_complete_behavior")
+  let g:schematic_task_complete_behavior = "error"
+endif
+
 if !exists("g:schematic_default_configuration_name")
   let g:schematic_default_configuration_name = "default"
 endif

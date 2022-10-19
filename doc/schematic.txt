@@ -109,6 +109,17 @@ OPTIONS                                   *schematic-options*
 The name of Schematic project files. Defaults to "schematic.json" if not set
 by the user.
 
+*g:schematic_task_complete_behavior*
+The way Schematic responds to a completed task. The default value is "error".
+Valid options are:
+
+  "always"  Always load the output into the quickfix window and open it.
+  "never"   Never load the output into the quickfix window or open it.
+  "error"   Load the output into the quickfix window and open it if the task
+            script completes with a non-zero exit code.
+
+Invalid values are treated the same as "never".
+
 *g:schematic_default_configuration_name*
 The name given to the configuration that Schematic generates if a project file
 doesn't explicitly define its own configurations. Defaults to "default" if not

@@ -53,9 +53,12 @@ endfunction
 
 function s:FinalizeJob(job_key, status) abort
   let job = s:schematic_jobs[a:job_key]
-  if a:status != 0
+  if g:schematic_task_complete_behavior == "always" || (a:status != 0 && g:schematic_task_complete_behavior == "error")
+    " Replace the quickfix list with the task output.
+    call setqflist([], "r")
     execute "caddfile " . fnameescape(job.output_file)
     execute "copen"
+    execute "wincmd p"
   endif
 
   let target = job["target"]
