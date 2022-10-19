@@ -172,11 +172,14 @@ function schematic#Update() abort
 
     let schematic = json_decode(join(readfile(schematic_file_path), " "))
 
+    let initial_configuration = get(schematic, "default_configuration", "")
+    let initial_target = get(schematic, "default_target", "")
+
     let t:schematic_configurations = {}
     let t:schematic_current_configuration = ""
     if has_key(schematic, "configurations")
       for [name, data] in items(schematic["configurations"])
-        if len(t:schematic_current_configuration) == 0
+        if len(t:schematic_current_configuration) == 0 || initial_configuration == name
           let t:schematic_current_configuration = name
         endif
 
@@ -204,7 +207,7 @@ function schematic#Update() abort
      call extend(target["run"], target["build"], 0)
 
      let t:schematic_targets[name] = target
-     if len(t:schematic_current_target) == 0
+     if len(t:schematic_current_target) == 0 || initial_target == name
        let t:schematic_current_target = name
      endif
     endfor

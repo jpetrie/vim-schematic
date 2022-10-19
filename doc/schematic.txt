@@ -97,6 +97,11 @@ Defines default scripts for clean/build/run tasks, used if a target does not
 explicitly define its own script. In these scripts, the '@' character can be
 used as a placeholder for the target name.
 
+"default_configuration"
+"default_target"
+Defines the default configuration and target to activate when updating project
+data via |:SUpdate|.
+
 ------------------------------------------------------------------------------
 OPTIONS                                   *schematic-options*
 
