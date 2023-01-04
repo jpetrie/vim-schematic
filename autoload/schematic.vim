@@ -58,6 +58,7 @@ function s:FinalizeJob(job_key, status) abort
     call setqflist([], "r")
     execute "caddfile " . fnameescape(job.output_file)
     execute "copen"
+    normal! G
     execute "wincmd p"
   endif
 
